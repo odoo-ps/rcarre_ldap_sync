@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+ldap_user_groups.access_ldap_group_user,access_ldap_group_user,ldap_user_groups.model_ldap_group,base.group_user,1,0,0,0
+ldap_user_groups.access_ldap_group_manager,access_ldap_group_manager,ldap_user_groups.model_ldap_group,base.group_system,1,1,1,1

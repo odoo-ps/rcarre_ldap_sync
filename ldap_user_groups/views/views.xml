@@ -1,0 +1,69 @@
+<!-- views/ldap_groups_views.xml -->
+<odoo>
+     <record id="view_ldap_group_list" model="ir.ui.view">
+        <field name="name">ldap.group.list</field>
+        <field name="model">ldap.group</field>
+        <field name="arch" type="xml">
+            <list string="Groupes LDAP">
+                <field name="name"/>
+                <field name="last_import_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_users_form_inherited_ldap" model="ir.ui.view">
+        <field name="name">res.users.form.ldap</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='login']" position="after">
+                <field name="is_ldap_user"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="view_ldap_group_form" model="ir.ui.view">
+        <field name="name">ldap.group.form</field>
+        <field name="model">ldap.group</field>
+        <field name="arch" type="xml">
+            <form string="Groupe LDAP">
+                <header>
+                    <button name="import_ldap_groups" type="object" string="Importer les groupes LDAP" class="btn-primary"/>
+                    <button name="import_odoo_permissions_from_json" type="object" string="Importer Droits depuis json" class="oe_highlight" context="{}" confirm="Es-tu sûr de vouloir importer les droits depuis le fichier json ?" />
+                    <button name="switch_connected_users" type="object" string="Bascule automatique des utilisateurs connectés" class="btn-secondary" context="{}" confirm="Cette action va attribuer le groupe 'Utilisateur interne' aux utilisateurs qui se sont déjà connectés et n'ont pas encore de groupe. Continuer ?" />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="last_import_date" readonly="1"/>
+                        <field name="name" readonly="1"/>
+                        <field name="member_names" readonly="1"/>                       
+                    </group>
+                    <notebook>
+                        <page string="Groupes Odoo pour attribuer les DA " >
+                            <group>
+                                <field name="group_ids" widget="many2many_tags" options="{'no_create': True}" />
+                            </group>
+                            <field name="stock_data" filename="import_filename"/>
+                        </page>
+                        <page string='Groupes LDAP pour copier les droits existant' >
+                            <group>
+                                <field name="linked_ldap_group_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ldap_groups" model="ir.actions.act_window">
+        <field name="name">Groupes LDAP</field>
+        <field name="res_model">ldap.group</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem name="LDAP" id="menu_ldap_root"/>
+    <menuitem name="Groupes LDAP" id="menu_ldap_groups" parent="menu_ldap_root" action="action_ldap_groups"/>
+    
+
+</odoo>
